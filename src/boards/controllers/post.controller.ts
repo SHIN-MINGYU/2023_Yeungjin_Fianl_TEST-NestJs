@@ -31,11 +31,15 @@ export class PostController {
   @Get()
   getPosts(@Query() postQuery) {}
 
+  /**
+   * @description [POST] 게시글 생성  함수입니다.
+   * @returns  success : 생성한 게시글의 정보,  error : Status Code 400 Can't Found
+   */
   @Post()
   createPost(@Body() body: any) {}
 
   /**
-   * @description [Put] 게시글 수정 함수입니다.
+   * @description [PUT] 게시글 수정 함수입니다.
    * @param {number} postId 수정할 게시글의 기본키입니다.
    * @returns  success : 수정한 게시글에 대한 정보  error : Status Code 400 Can't Found
    */
@@ -43,9 +47,9 @@ export class PostController {
   updatePost(@Param('id') postId: number) {}
 
   /**
-   * @description [Delete] 게시글 삭제 함수입니다.
+   * @description [DELETE] 게시글 삭제 함수입니다.
    * @param {number} postId 삭제할 게시글의 기본키입니다.
-   * @returns  success : 조회한 게시글들에 대한 대략적인 정보  error : Status Code 400 Can't Found
+   * @returns  success : 삭제 성공여부  error : Status Code 400 Can't Found
    */
   @Delete('/:id')
   deletePost(@Param('id') postId: number) {}

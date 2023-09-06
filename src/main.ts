@@ -1,10 +1,33 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './app.exception';
+import * as winston from 'winston';
+import {
+  utilities as nestWinstonModuleUtilities,
+  WinstonModule,
+} from 'nest-winston';
 
-async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-  app.useGlobalFilters(new HttpExceptionFilter());
-  await app.listen(3000);
+interface Options {
+  logger: any;
 }
-bootstrap();
+const logger = WinstonModule.createLogger({
+  transports: [
+    new winston.transports.Console({
+      level: process.env.NODE_ENV === 'production' ? 'info' : 'silly',
+      format: winston.format.combine(
+        winston.format.timestamp(),
+        nestWinstonModuleUtilities.format.nestLike('FINAL_TEST', {
+          prettyPrint: true,
+        }),
+      ),
+    }),
+  ],
+});
+
+async function bootstrap(options: Options) {
+  const app = await NestFactory.create(AppModule, options);
+  app.useGlobalFilters(new HttpExceptionFilter());
+  await app.listen(process.env.PORT || 3000);
+}
+
+bootstrap({ logger });
